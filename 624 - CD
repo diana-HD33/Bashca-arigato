@@ -1,0 +1,55 @@
+//we all are lost trying to be someone
+#include<bits/stdc++.h>
+#define pb push_back
+#define ff first
+#define ss second
+using namespace std;
+const int MAX=1000000;
+int dp[22][MAX];
+pair<pair<int,int>, bool> pai[22][MAX];
+int A[MAX];
+void solve(){
+    int w;
+    while(cin>>w){
+        int n;
+        memset(dp,-1,sizeof dp);
+        cin>>n;
+        dp[0][0]=0;
+        for(int i=1; i<=n; i++){
+            cin>>A[i];
+        }
+        for(int i=1; i<=n; i++){
+            for(int j=0; j<=w; j++){
+                dp[i][j]=dp[i-1][j];
+                pai[i][j]={{i-1,j},false};
+                if(j-A[i]>=0 and dp[i-1][j-A[i]]>-1){
+                    if(dp[i][j] < dp[i-1][j-A[i]]+A[i]){
+                        pai[i][j]={{i-1,j-A[i]},true};
+                    }
+                    dp[i][j]=max(dp[i][j],dp[i-1][j-A[i]]+A[i]);
+                }
+            }
+        }
+        for(int i=w; i>=0; i--){
+            if(dp[n][i]!=-1){
+                int a=n, b=i;
+                while(a!=0 or b!=0){
+                    if(pai[a][b].second){
+                        cout<<A[a]<<" ";
+                    }
+                    pair<pair<int,int>, bool> x=pai[a][b];
+                    a=x.first.first;
+                    b=x.first.second;
+                }
+                cout<<"sum:"<<dp[n][i]<<endl;
+                break;
+            }
+        }
+    }
+
+
+}
+int main(){
+    solve();
+    return 0;
+}
