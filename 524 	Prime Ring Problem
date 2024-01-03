@@ -1,0 +1,61 @@
+//we all are lost trying to be someone
+#include<bits/stdc++.h>
+#define pb push_back
+using namespace std;
+const int MAX=1000000;
+int I[20],P[20];
+bool prim[60];
+int n;
+void criba(){
+    prim[0]=true;
+    prim[1]=true;
+    for(int i=2; i<60; i++){
+        if(!prim[i]){
+            for(int j=i*2; j<60; j+=i){
+                prim[j]=true;
+            }
+        }
+    }
+}
+bool looks(){
+    for(int i=0; i<n*2; i++){
+        if(prim[I[i/2]+P[i/2]]){
+            return false;
+        }
+        if(i/2+1<n){
+            if(prim[P[i/2]+I[(i/2)+1]])
+                return false;
+        }
+    }
+    if(prim[P[n-1]+1])return false;
+    return true;
+}
+void solve(int t){
+    int a=0, b=0;
+    for(int i=1; i<=n; i++){
+        if(i%2) I[a]=i,a++;
+        else P[b]=i,b++;
+    }
+    n/=2;
+    cout<<"Case "<<t<<':'<<'\n';
+    do{
+        do{
+            if(looks()){
+                for(int i=0; i<n*2; i++){
+                    if(i%2){
+                        cout<<P[i/2]<<' ';
+                    }
+                    else cout<<I[i/2]<<' ';
+                }
+                cout<<'\n';
+            }
+        }while(next_permutation(P,P+n));
+    }while(next_permutation(I+1,I+n));
+
+}
+int main(){
+    criba();
+    int t=0;
+    while(cin>>n)t++,solve(t);
+    return 0;
+}
