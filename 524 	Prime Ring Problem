@@ -16,15 +16,20 @@ void criba(){
             }
         }
     }
+    return;
 }
 void looks(vector<int> s){
     if(sz(s) == n and !prim[s.back() + 1]){
-        for(int x:s)cout<<x<<' ';
+        for(int x:s){
+            cout<<x;
+            if(x!=s.back())cout<<' ';
+        }
         cout<<'\n';
         return;
     }
     if(sz(s) == n)return;
     bool exist[20];
+    for(int i=0; i<20; i++)exist[i]=false;
     for(int x:s) exist[x]=true;
     if(sz(s)%2){//toca par
         for(int i=2; i<=n; i+=2){
@@ -44,9 +49,10 @@ void looks(vector<int> s){
             }
         }
     }
-    
+    return;
 }
 void solve(int t){
+    if (t != 1) cout<<'\n';
     cout<<"Case "<<t<<':'<<'\n';
     vector<int> c;
     c.pb(1);
@@ -54,7 +60,10 @@ void solve(int t){
 }
 int main(){
     criba();
-    int t=0;
-    while(cin>>n)t++,solve(t);
+    int t=1;
+    while(cin>>n){
+        solve(t);
+        t++;
+    }
     return 0;
 }
