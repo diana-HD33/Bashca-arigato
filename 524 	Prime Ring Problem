@@ -1,9 +1,9 @@
 //we all are lost trying to be someone
 #include<bits/stdc++.h>
 #define pb push_back
+#define sz(x) int(x.size())
 using namespace std;
 const int MAX=1000000;
-int I[20],P[20];
 bool prim[60];
 int n;
 void criba(){
@@ -17,41 +17,40 @@ void criba(){
         }
     }
 }
-bool looks(){
-    for(int i=0; i<n*2; i++){
-        if(prim[I[i/2]+P[i/2]]){
-            return false;
-        }
-        if(i/2+1<n){
-            if(prim[P[i/2]+I[(i/2)+1]])
-                return false;
+void looks(vector<int> s){
+    if(sz(s) == n and !prim[s.back() + 1]){
+        for(int x:s)cout<<x<<' ';
+        cout<<'\n';
+        return;
+    }
+    if(sz(s) == n)return;
+    bool exist[20];
+    for(int x:s) exist[x]=true;
+    if(sz(s)%2){//toca par
+        for(int i=2; i<=n; i+=2){
+            if( !exist[i] and !prim[s.back() + i]){
+                s.pb(i);
+                looks(s);
+                s.pop_back();
+            }
         }
     }
-    if(prim[P[n-1]+1])return false;
-    return true;
+    else{//toca impar
+        for(int i=3; i<=n; i+=2){
+            if( !exist[i] and !prim[s.back() + i]){
+                s.pb(i);
+                looks(s);
+                s.pop_back();
+            }
+        }
+    }
+    
 }
 void solve(int t){
-    int a=0, b=0;
-    for(int i=1; i<=n; i++){
-        if(i%2) I[a]=i,a++;
-        else P[b]=i,b++;
-    }
-    n/=2;
     cout<<"Case "<<t<<':'<<'\n';
-    do{
-        do{
-            if(looks()){
-                for(int i=0; i<n*2; i++){
-                    if(i%2){
-                        cout<<P[i/2]<<' ';
-                    }
-                    else cout<<I[i/2]<<' ';
-                }
-                cout<<'\n';
-            }
-        }while(next_permutation(P,P+n));
-    }while(next_permutation(I+1,I+n));
-
+    vector<int> c;
+    c.pb(1);
+    looks(c);
 }
 int main(){
     criba();
