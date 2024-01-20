@@ -1,0 +1,73 @@
+//we all are lost trying to be someone
+#include<bits/stdc++.h>
+#define pb push_back
+#define sz(x) int(x.size())
+#define all(s) s.begin(),s.end()
+typedef long long ll;
+using namespace std;
+const int MAX=1000000;
+const ll infiniti=1e15;
+string A[10];
+pair<int, int>mobs[3]={{0,-1},{0,1},{-1,0}};
+int n, m;
+vector<int> ans;
+string nam[4];
+bool valid2(int i, int j){
+    string h="IEHOVA";
+    for(int k=0; k<sz(h); k++){
+        if(A[i][j]==h[k])return true;
+    }
+    if(i==0 && A[i][j]=='#') return true;
+    return false;
+}
+bool valid(int i, int j){
+    return (i>=0 && i<n && j>=0 && j<m);
+}
+bool dfs(int u, int f){
+    int i=u/m;
+    int j=u%m;
+    if(A[i][j]=='#'){
+        return true;
+    }
+    for(int k=0; k<3; k++){
+        int x=i+mobs[k].first;
+        int y=j+mobs[k].second;
+        if(valid(x,y) && valid2(x,y) && x*m+y!=f){
+            int v=x*m+y;
+            if(dfs(v,u)){
+                ans.pb(k);
+                return true;
+            }
+
+        }
+    }
+    return false;
+}
+void solve(){
+    cin>>n>>m;
+    for(int i=0; i<n; i++){
+        cin>>A[i];
+    }
+    for(int i=0; i<m; i++){
+        char a=A[n-1][i];
+        if(a=='@'){
+            int u=(n-1)*m+i;
+            dfs(u, u);
+        }
+    }
+    for(int i=sz(ans)-1; i>=0;  i--){
+        cout<<nam[ans[i]];
+        if(i>0)cout<<' ';
+    }
+    cout<<'\n';
+    ans.clear();
+}
+int main(){
+    nam[0]="left";
+    nam[1]="right";
+    nam[2]="forth";
+    int t;
+    cin>>t;
+    while(t--) solve();
+    return 0;
+}
